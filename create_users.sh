@@ -51,7 +51,7 @@ fi
 
 # Function to log actions
 log() {
-    echo "$(date): $1" | run_sudo tee -a "$log_file" > /dev/null
+    echo "$(date): $1" | sudo tee -a "$log_file" > /dev/null
 }
 
 # Function to generate random password
