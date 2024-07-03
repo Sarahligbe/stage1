@@ -31,9 +31,12 @@ input_file=$1
 log_file="/var/log/user_management.log"
 password_csv="/var/secure/user_passwords.csv"
 password_file="/var/secure/user_passwords.txt"
+password_dir="/var/secure"
 
-#create the /var/secure directory
-sudo mkdir /var/secure
+#create the password directory if it doesn't exist
+if [ ! -d $password_dir ]; then
+    sudo mkdir $password_dir
+fi
 
 # Create log file, password csv, and password file and set permissions
 sudo touch $log_file $password_csv $password_file
