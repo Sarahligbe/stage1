@@ -14,7 +14,7 @@ check_sudo() {
 }
 
 # Check if user has sudo privileges
-if ! check_sudo; then
+if [ ! check_sudo ]; then
     echo "This script requires sudo privileges to run"
     echo "Please run this script with sudo or as a user with sudo privileges"
     exit 1
@@ -35,22 +35,9 @@ password_file="/var/secure/user_passwords.txt"
 #create the /var/secure directory
 sudo mkdir /var/secure
 
-# Create log file if it doesn't exist
-if ! -f "$log_file"; then
-    sudo touch $log_file
-fi
-
-# Create password csv if it doesn't exist and set permissions
-if ! -f "$password_csv"; then
-    sudo touch $password_csv $password_file
-    sudo chmod 600 $password_csv $password_file
-fi
-
-# Create password file if it doesn't exist and set permissions
-if ! -f "$password_file"; then
-    sudo touch $password_file
-    sudo chmod 600 $password_file
-fi
+# Create log file, password csv, and password file and set permissions
+sudo touch $log_file $password_csv $password_file
+sudo chmod 600 $password_csv $password_file
 
 # Function to log actions
 log() {
