@@ -52,14 +52,27 @@ generate_password() {
     openssl rand -base64 12
 }
 
+#set line number to zero. to be used in error handling for invalid inputs
+line_number=0
+
 # Read input file line by line
-while IFS=';' read -r username groups || [[ -n "$username" ]]; do
+while IFS=';' read -r username groups; do
     # Remove leading/trailing whitespace
     username=$(echo $username | xargs)
     groups=$(echo $groups | xargs)
 
+    #increment the line number after reading each line
+    line_number=$((line_number + 1))
+
+    # Check that the username and group is present
+    if [[ -z "$username" || -z "$groups" ]]; then
+        log "Error: Invalid input on line $line_number. Ensure Username and groups are provided"
+        echo "Error: Invalid input on line $line_number. Ensure Username and groups are provided"
+        continue
+    fi
+
     # Check if user already exists
-    if [ id "$username" &>/dev/null ]; then
+    if id "$username" &>/dev/null; then
         log "User $username already exists. Skipping."
         continue
     fi
