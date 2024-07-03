@@ -14,7 +14,7 @@ check_sudo() {
 }
 
 # Check if user has sudo privileges
-if [ ! check_sudo ]; then
+if ! check_sudo; then
     echo "This script requires sudo privileges to run"
     echo "Please run this script with sudo or as a user with sudo privileges"
     exit 1
@@ -32,19 +32,22 @@ log_file="/var/log/user_management.log"
 password_csv="/var/secure/user_passwords.csv"
 password_file="/var/secure/user_passwords.txt"
 
+#create the /var/secure directory
+sudo mkdir /var/secure
+
 # Create log file if it doesn't exist
-if [ ! -f "$log_file" ]; then
+if ! -f "$log_file"; then
     sudo touch $log_file
 fi
 
 # Create password csv if it doesn't exist and set permissions
-if [ ! -f "$password_csv" ]; then
+if ! -f "$password_csv"; then
     sudo touch $password_csv $password_file
     sudo chmod 600 $password_csv $password_file
 fi
 
 # Create password file if it doesn't exist and set permissions
-if [ ! -f "$password_file" ]; then
+if ! -f "$password_file"; then
     sudo touch $password_file
     sudo chmod 600 $password_file
 fi
@@ -93,7 +96,7 @@ while IFS=';' read -r username groups || [[ -n "$username" ]]; do
     for group in "${group_array[@]}"; do
         group=$(echo $group | xargs)
         # Create group if it doesn't exist
-        if [ ! getent group $group > /dev/null 2>&1 ]; then
+        if ! getent group $group &>/dev/null; then
             sudo groupadd $group
             log "Created group $group"
         fi
